@@ -1,0 +1,54 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1><i class="fa fa-{{ filetype }}"></i> Welcome to Media Bundle</h1>
+                {{ form_start(form)}}
+                {{ form_widget(form)}}
+                {{ form_end(form)}}
+            </div>
+        </div>
+        
+            
+        
+        <div class="row">
+            <div class="col-12">
+                <ul class="card-deck">
+                {% for file in files %}
+                    <div class="card">
+                        {% if file|mediaType == 'image' %}
+                            <img class="card-img-top mr-3" src="{{ asset(file.path) }}"/>
+                        {% else %}
+                            <span class="card-img-top fa fa-file-alt text-primary display-4 mr-3"></span>
+                        {% endif %}
+                            <div class="card-body">
+                                <h4 class="card-title">{{ file.name }}</h4>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item">
+                                    <label class="text-bolder">Path :</label> {{ file.path }}
+                                </div>
+                                <div class="list-group-item">
+                                    <label>Size :</label> {{ file.fileSize(true) }}
+                                </div>
+                            {% if file|mediaType == 'image' %}
+                                <div class="list-group-item">
+                                    <label>Image Size :</label> {{ file.size }}
+                                </div>
+                            {% endif %}
+                                <div class="list-group-item">
+                                    <label>Hash :</label> {{ file.hash }}
+                                </div>
+                                <div class="list-group-item">
+                                    <label>Modification Date :</label> {{ file.modificationDate|date('d/m/Y H:i:s') }}
+                                </div>
+                            </div>
+                    </div>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
