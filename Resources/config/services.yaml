@@ -5,18 +5,20 @@ services:
 
   ICS\MediaBundle\Controller\:
     resource: "../../Controller"
+    public: true
     tags: ['controller.service_arguments']
   ICS\MediaBundle\Service\:
     resource: "../../Service"
+    public: true
     tags: ['controller.service_arguments']
   ICS\MediaBundle\Command\:
     resource: "../../Command"
     tags: ['controller.service_arguments']
   ICS\MediaBundle\Twig\:
     resource: "../../Twig"
-    public: false
+    public: true
     tags: ['twig.extension']
   ICS\MediaBundle\Form\:
     resource: "../../Form"
-    public: false
+    public: true
     tags: ['controller.service_arguments']
