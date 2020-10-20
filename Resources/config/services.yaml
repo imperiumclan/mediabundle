@@ -6,6 +6,9 @@ services:
   ICS\MediaBundle\Controller\:
     resource: "../../Controller"
     tags: ['controller.service_arguments']
+  ICS\MediaBundle\Service\:
+    resource: "../../Service"
+    tags: ['controller.service_arguments']
   ICS\MediaBundle\Command\:
     resource: "../../Command"
     tags: ['controller.service_arguments']

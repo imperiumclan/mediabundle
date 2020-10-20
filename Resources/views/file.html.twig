@@ -10,44 +10,50 @@
                 {{ form_end(form)}}
             </div>
         </div>
-        
-            
-        
         <div class="row">
             <div class="col-12">
-                <ul class="card-deck">
                 {% for file in files %}
-                    <div class="card">
-                        {% if file|mediaType == 'image' %}
-                            <img class="card-img-top mr-3" src="{{ asset(file.path) }}"/>
-                        {% else %}
-                            <span class="card-img-top fa fa-file-alt text-primary display-4 mr-3"></span>
-                        {% endif %}
-                            <div class="card-body">
-                                <h4 class="card-title">{{ file.name }}</h4>
-                            </div>
-                            <div class="list-group list-group-flush">
-                                <div class="list-group-item">
-                                    <label class="text-bolder">Path :</label> {{ file.path }}
-                                </div>
-                                <div class="list-group-item">
-                                    <label>Size :</label> {{ file.fileSize(true) }}
-                                </div>
+                    <div class="list-group-item">
+                        <div class="media">
                             {% if file|mediaType == 'image' %}
-                                <div class="list-group-item">
-                                    <label>Image Size :</label> {{ file.size }}
-                                </div>
+                                <img class="align-self-start mr-3" src="{{ file.assetPath| imagine_filter('mediaBundleMini') }}"/>
+                            {% else %}
+                                <span class="fa fa-file-alt text-primary display-4 mr-3 align-self-start"></span>
                             {% endif %}
-                                <div class="list-group-item">
-                                    <label>Hash :</label> {{ file.hash }}
-                                </div>
-                                <div class="list-group-item">
-                                    <label>Modification Date :</label> {{ file.modificationDate|date('d/m/Y H:i:s') }}
-                                </div>
+                            <div class="media-body">
+                                <h5 class="mt-0">{{ file.name }}</h5>
+                                <div><b>Size :</b> {{ file.fileSize(true) }}</div>
+                                {% if file|mediaType == 'image' %}
+                                    <div><b>Image Size :</b> {{ file.size }}</div>
+                                {% endif %}
+                                <div><b>Hash :</b> {{ file.hash }}</div>
+                                <div><b>Modification Date :</b> {{ file.modificationDate|date('d/m/Y H:i:s') }}</div>
+                                                                {# 
+                                
+                                    <div class="list-group-item">
+                                        
+                                    </div>
+                                {% endif %}
+                                
+                            
+                                #}
                             </div>
-                    </div>
+                            <div class="btn-group">
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a class="btn btn-primary" target="_blank" href="{{ asset(file.assetPath) }}" title="Download"><i class="fa fa-download"></i></a> 
+                                {% endif %}
+                                {% if file|mediaType == 'image' %}
+                                    <a class="btn btn-warning" href="{{ path('sdi_media_image_edit',{id: file.id}) }}" title="Edit"><i class="fa fa-edit"></i></a>
+                                {% else %}
+                                    <a class="btn btn-warning" href="{{ path('sdi_media_file_edit',{id: file.id}) }}"  title="Edit"><i class="fa fa-edit"></i></a>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a class="btn btn-danger" target="_blank" href="{{ asset(file.assetPath) }}" title="Delete"><i class="fa fa-trash"></i></a> 
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>  
                 {% endfor %}
-                </ul>
             </div>
         </div>
     </div>

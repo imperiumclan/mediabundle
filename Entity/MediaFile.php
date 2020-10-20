@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * File Management Entity
@@ -131,9 +132,8 @@ class MediaFile {
      * @param boolean $withHash does entity compute file hash ?
      * @return boolean true if successfull loading, false in other case
      */
-    public function Load(string $filepath, $movedDirectory=null, $withHash=true) : bool
+    public function Load(string $filepath, $movedDirectory=null,$filename="",$withHash=true) : bool
     {
-        dump($this->basePath);
         try
         {
             $newPath = $this->basePath."/files";
@@ -155,16 +155,24 @@ class MediaFile {
 
             if(file_exists($filepath))
             {
-                $this->setName(basename($filepath));
-                $this->setPath($newPath.'/'.$this->getName());
+                if($filename=="")
+                {
+                    $this->setName(basename($filepath));
+                    $this->setPath($newPath.'/'.$this->getName());
+                }
+                else
+                {
+                    $this->setName($filename);
+                    $this->setPath($newPath.'/'.$filename);
+                }
                 
                 if(rename($filepath,$this->getPath(true)))
                 {
                     $modifDate = new DateTime();
-                    $modifDate->setTimestamp(filemtime($this->getPath(true)));
-                    $this->setMimeType(mime_content_type($this->getPath(true)));
+                    $modifDate->setTimestamp(filemtime($this->getPath()));
+                    $this->setMimeType(mime_content_type($this->getPath()));
                     $this->setModificationDate($modifDate);
-                    $this->setFilesize(filesize($this->getPath(true)));
+                    $this->setFilesize(filesize($this->getPath()));
                     if($withHash)
                     {
                         $this->setHash($this->makeHash());
@@ -195,9 +203,9 @@ class MediaFile {
      */
     public function removeFromFileSystem()
     {
-        if(file_exists($this->getPath(true)))
+        if(file_exists($this->getPath()))
         {
-            unlink($this->getPath(true));
+            unlink($this->getPath());
         }
     }
 
@@ -211,17 +219,17 @@ class MediaFile {
         return md5_file($this->getPath());
     }
 
+    public function getAssetPath()
+    {
+        return $this->mediasDirectory.str_replace($this->basePath,'',$this->path);
+    }
+
     /**
      * Get the value of path
      */ 
-    public function getPath($full=false)
+    public function getPath()
     {
-        if($full)
-        {
-            return $this->path;
-        }
-
-        return $this->mediasDirectory.str_replace($this->basePath,'',$this->path);
+        return $this->path;
     }
 
     /**
@@ -232,6 +240,11 @@ class MediaFile {
     public function setPath($path)
     {
         $this->path=$path;
+        
+        if(is_a($path,UploadedFile::class))
+        {
+            $this->load($path->getRealPath(),'uploaded/files',$path->getClientOriginalName());   
+        }
 
         return $this;
     }

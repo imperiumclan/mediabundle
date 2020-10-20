@@ -9,12 +9,11 @@
 namespace ICS\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Types\BigIntType;
 use Exception;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * File Management Entity
@@ -32,7 +31,7 @@ class MediaImage extends MediaFile {
      *
      * @ORM\Column(type="integer", nullable=false)
      *
-     * @var int
+     * @var Integer
      */
     protected $width;
     /**
@@ -40,7 +39,7 @@ class MediaImage extends MediaFile {
      *
      * @ORM\Column(type="integer", nullable=false)
      *
-     * @var int
+     * @var Integer
      */
     protected $height;
 
@@ -50,9 +49,9 @@ class MediaImage extends MediaFile {
     }
 
 
-    public function Load(string $filepath, $movedDirectory=null, $withHash=true) : bool
+    public function Load(string $filepath, $movedDirectory=null, $filename="",$withHash=true) : bool
     {
-        $result = parent::Load($filepath,$movedDirectory,$withHash);
+        $result = parent::Load($filepath,$movedDirectory,$filename,$withHash);
 
         try
         {
@@ -114,4 +113,21 @@ class MediaImage extends MediaFile {
     {
         return $this->width."x".$this->height;
     }
+
+    /**
+     * Set the value of path
+     *
+     * @return  self
+     */ 
+    // public function setPath($path)
+    // {
+    //     $this->path=$path;
+        
+    //     if(is_a($path,UploadedFile::class))
+    //     {
+    //         $this->load($path->getRealPath(),'uploaded/images',$path->getClientOriginalName());   
+    //     }
+
+    //     return $this;
+    // }
 }

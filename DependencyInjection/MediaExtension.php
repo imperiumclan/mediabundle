@@ -27,6 +27,11 @@ class MediaExtension extends Extension implements PrependExtensionInterface
         $configs=$this->processConfiguration($configuration,$configs);
 
         $container->setParameter('medias',$configs);
+
+        // $container->setParameter('twig.form.resources', array_merge(
+        //     $container->hasParameter('twig.form.resources') ? $container->getParameter('twig.form.resources') : [],
+        //     ['@Media/Form/form_div_layout.html.twig']
+        // ));
     }
 
     /**

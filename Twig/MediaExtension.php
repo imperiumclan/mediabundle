@@ -46,7 +46,7 @@ class MediaExtension extends AbstractExtension
         return [];
     }
 
-    public function MediaType(Environment $env, MediaFile $file)
+    public function MediaType(Environment $env, $file)
     {
         if(is_a($file,MediaImage::class))
         {

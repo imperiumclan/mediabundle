@@ -33,24 +33,29 @@ class MediaFileType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $media=$builder->getData();
-        $this->outputdir=$options['outputdir'];
+        
         switch($options['data_class'])
         {
            
             case MediaImage::class :
                 $builder->add('path',ImageType::class,array(
+                    'label' => "Image",
                     'image_filter' => 'mediaBundleThumbnail',
-                    'image_path' => 'medias'
+                    'image_path' => 'medias',
+                    'data_class' => null
+
                 ));
             break;
 
             default :
-                $builder->add('path',ImageType::class,array(
-                    'label' => "Fichier",  
-                    'image_filter' => 'mediaBundleThumbnail',
-                    'image_path' => 'medias'
-                ));
+                $builder->add('path',FileType::class,array(
+                    'label' => "Fichier", 
+                    'data_class' => null
+                ))
+           
+            ;
+
+            $builder->add('submit',SubmitType::class);
         }
 
     }
@@ -60,7 +65,6 @@ class MediaFileType extends AbstractType {
     {
         $resolver-> setDefaults([
             'data_class' => MediaFile::class,
-            'outputdir' => null
         ]);
     }
 }

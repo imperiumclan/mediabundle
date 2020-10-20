@@ -57,15 +57,18 @@ class DefaultController extends AbstractController
             'sdata' => $sdata
         ]);
     }
-
+    
     /**
      * @Route("/files" , name="sdi_media_file")
+     * @Route("/files/edit/{id}" , name="sdi_media_file_edit")
      */
-    public function fileManagement(Request $request,ContainerInterface $container)
+    public function fileManagement(Request $request,ContainerInterface $container,MediaFile $file=null)
     {
-        $files=$this->getDoctrine()->getRepository(MediaFile::class)->findAll();
-
-        $file=new MediaFile($container);
+        
+        if($file==null)
+        {
+            $file=new MediaFile($container);
+        }
 
         $form = $this->createForm(MediaFileType::class,$file);
 
@@ -73,11 +76,16 @@ class DefaultController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $file=$form->getData();
+            
+            
+
             $em=$this->getDoctrine()->getManager();
             $em->persist($file);
             $em->flush();
 
         }
+
+        $files=$this->getDoctrine()->getRepository(MediaFile::class)->findAll();
 
         return $this->render('@Media/file.html.twig', [
 
@@ -89,11 +97,33 @@ class DefaultController extends AbstractController
 
     /**
      * @Route("/images" , name="sdi_media_image")
+     * @Route("/images/edit/{id}" , name="sdi_media_image_edit")
      */
-    public function imageManagement()
+    public function imageManagement(Request $request,ContainerInterface $container,MediaImage $file=null)
     {
+       
+        if($file==null)
+        {
+            $file=new MediaImage($container);
+        }
+
+        $form = $this->createForm(MediaFileType::class,$file,['data_class' => MediaImage::class]);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $file=$form->getData();
+            
+            
+
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($file);
+            $em->flush();
+
+        }
+
         $files=$this->getDoctrine()->getRepository(MediaImage::class)->findAll();
-        $form = $this->createForm(MediaFileType::class,new MediaFile(),['mediatype' => MediaImage::class]);
+
         return $this->render('@Media/file.html.twig', [
             'files' => $files,
             'filetype' => 'image',
