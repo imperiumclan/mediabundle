@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/" , name="sdi_media_homepage")
+     * @Route("/" , name="ics_media_homepage")
      */
     public function index(ContainerInterface $container)
     {
@@ -57,14 +57,14 @@ class DefaultController extends AbstractController
             'sdata' => $sdata
         ]);
     }
-    
+
     /**
-     * @Route("/files" , name="sdi_media_file")
-     * @Route("/files/edit/{id}" , name="sdi_media_file_edit")
+     * @Route("/files" , name="ics_media_file")
+     * @Route("/files/edit/{id}" , name="ics_media_file_edit")
      */
     public function fileManagement(Request $request,ContainerInterface $container,MediaFile $file=null)
     {
-        
+
         if($file==null)
         {
             $file=new MediaFile($container);
@@ -76,8 +76,8 @@ class DefaultController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $file=$form->getData();
-            
-            
+
+
 
             $em=$this->getDoctrine()->getManager();
             $em->persist($file);
@@ -96,12 +96,12 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/images" , name="sdi_media_image")
-     * @Route("/images/edit/{id}" , name="sdi_media_image_edit")
+     * @Route("/images" , name="ics_media_image")
+     * @Route("/images/edit/{id}" , name="ics_media_image_edit")
      */
     public function imageManagement(Request $request,ContainerInterface $container,MediaImage $file=null)
     {
-       
+
         if($file==null)
         {
             $file=new MediaImage($container);
@@ -113,8 +113,8 @@ class DefaultController extends AbstractController
         if($form->isSubmitted() && $form->isValid())
         {
             $file=$form->getData();
-            
-            
+
+
 
             $em=$this->getDoctrine()->getManager();
             $em->persist($file);

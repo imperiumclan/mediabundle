@@ -2,7 +2,7 @@
     "name": "imperiumclan/media-bundle",
     "description": "File Management for symfony",
     "type": "symfony-bundle",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -21,6 +21,10 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": true
+        }
     }
-
 }

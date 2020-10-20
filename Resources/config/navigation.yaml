@@ -5,43 +5,43 @@ navigation:
         medias:
           lib: Medias
           icon: fa fa-file
-          route: sdi_media_homepage
+          route: ics_media_homepage
           childs:
             media_homepage:
               lib: Dashboard
               icon: fa fa-window
-              route: sdi_media_homepage
+              route: ics_media_homepage
             divider1:
               lib: divider
             media_file:
               lib: File
               icon: fa fa-file
-              route: sdi_media_file
+              route: ics_media_file
             media_image:
               lib: Image
               icon: fa fa-image
-              route: sdi_media_image
+              route: ics_media_image
             media_sound:
               lib: Sound
               icon: fa fa-speak
-              route: sdi_media_file
+              route: ics_media_file
             media_video:
               lib: Video
               icon: fa fa-video
-              route: sdi_media_file
+              route: ics_media_file
             divider2:
               lib: divider
             media_photo:
               lib: Photo
               icon: fa fa-picture
-              route: sdi_media_file
+              route: ics_media_file
             media_music:
               lib: Music
               icon: fa fa-music
-              route: sdi_media_file
+              route: ics_media_file
             media_movie:
               lib: Movie
               icon: fa fa-film
-              route: sdi_media_file
+              route: ics_media_file
           roles:
               - ROLE_ADMIN
