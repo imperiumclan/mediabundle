@@ -2,23 +2,20 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+    public: false
 
   ICS\MediaBundle\Controller\:
     resource: "../../Controller"
-    public: true
     tags: ['controller.service_arguments']
   ICS\MediaBundle\Service\:
     resource: "../../Service"
-    public: true
     tags: ['controller.service_arguments']
   ICS\MediaBundle\Command\:
     resource: "../../Command"
     tags: ['controller.service_arguments']
   ICS\MediaBundle\Twig\:
     resource: "../../Twig"
-    public: true
     tags: ['twig.extension']
   ICS\MediaBundle\Form\:
     resource: "../../Form"
-    public: true
     tags: ['controller.service_arguments']
