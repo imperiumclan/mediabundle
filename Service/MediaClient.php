@@ -16,7 +16,7 @@ class MediaClient
     protected $client;
     protected $container;
 
-    protected function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $store = new Store($container->getParameter('kernel.project_dir').'/var/cache/WebServices/Downloader/');
         $this->client=new CurlHttpClient();
