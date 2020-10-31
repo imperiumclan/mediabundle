@@ -22,3 +22,6 @@ services:
     resource: "../../Form"
     public: true
     tags: ['controller.service_arguments']
+  ICS\MediaBundle\Service\MediaClient:
+        # redundant thanks to _defaults, but value is overridable on each service
+        autowire: true
