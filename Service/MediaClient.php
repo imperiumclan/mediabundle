@@ -15,6 +15,7 @@ class MediaClient
 {
     protected $client;
     protected $container;
+    protected $basePath;
 
     public function __construct(ContainerInterface $container)
     {
@@ -29,6 +30,13 @@ class MediaClient
     {
         $mediasDirectory = $this->container->getParameter('medias')['path'];
         $this->basePath = $this->container->get('kernel')->getProjectDir().'/public/'.$mediasDirectory;
+
+        if(!file_exists($this->basePath))
+        {
+            mkdir($this->basePath,0777,true);
+        }
+
+        return $this->basePath;
     }
 
     public function DownloadFile(string $url,string $fileFullname=null)
@@ -51,7 +59,7 @@ class MediaClient
             fwrite($fileHandler, $chunk->getContent());
         }
 
-        $result = new MediaFile();
+        $result = new MediaFile($this->container);
         $result->Load($fileFullname);
 
         return $result;
@@ -77,7 +85,7 @@ class MediaClient
             fwrite($fileHandler, $chunk->getContent());
         }
 
-        $result = new MediaImage();
+        $result = new MediaImage($this->container);
         $result->Load($fileFullname);
 
         return $result;
@@ -103,7 +111,7 @@ class MediaClient
             fwrite($fileHandler, $chunk->getContent());
         }
 
-        $result = new MediaVideo();
+        $result = new MediaVideo($this->container);
         $result->Load($fileFullname,null,"",false);
 
         return $result;

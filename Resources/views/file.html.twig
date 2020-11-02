@@ -28,31 +28,32 @@
                                 {% endif %}
                                 <div><b>Hash :</b> {{ file.hash }}</div>
                                 <div><b>Modification Date :</b> {{ file.modificationDate|date('d/m/Y H:i:s') }}</div>
-                                                                {# 
-                                
+                                <div><b>Public path :</b> <a href="{{ asset(file.assetPath) }}" target="_blank">{{ file.assetPath }}</a></div>
+                                                                {#
+
                                     <div class="list-group-item">
-                                        
+
                                     </div>
                                 {% endif %}
-                                
-                            
+
+
                                 #}
                             </div>
                             <div class="btn-group">
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a class="btn btn-primary" target="_blank" href="{{ asset(file.assetPath) }}" title="Download"><i class="fa fa-download"></i></a> 
+                                    <a class="btn btn-primary" target="_blank" href="{{ asset(file.assetPath) }}" title="Download"><i class="fa fa-download"></i></a>
                                 {% endif %}
                                 {% if file|mediaType == 'image' %}
-                                    <a class="btn btn-warning" href="{{ path('sdi_media_image_edit',{id: file.id}) }}" title="Edit"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-warning" href="{{ path('ics_media_image',{id: file.id}) }}" title="Edit"><i class="fa fa-edit"></i></a>
                                 {% else %}
-                                    <a class="btn btn-warning" href="{{ path('sdi_media_file_edit',{id: file.id}) }}"  title="Edit"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-warning" href="{{ path('ics_media_file',{id: file.id}) }}"  title="Edit"><i class="fa fa-edit"></i></a>
                                 {% endif %}
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <a class="btn btn-danger" target="_blank" href="{{ asset(file.assetPath) }}" title="Delete"><i class="fa fa-trash"></i></a> 
+                                    <a class="btn btn-danger" target="_blank" href="{{ asset(file.assetPath) }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 {% endif %}
                             </div>
                         </div>
-                    </div>  
+                    </div>
                 {% endfor %}
             </div>
         </div>
