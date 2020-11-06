@@ -77,7 +77,7 @@ class MediaClient
         $response = $this->client->request('GET', $url);
 
         if (200 !== $response->getStatusCode()) {
-            throw new \Exception('Download Error: '. $this->mediaURL);
+            return null;
         }
 
         $fileHandler = fopen($fileFullname, 'w');
