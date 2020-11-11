@@ -25,6 +25,7 @@ class DefaultController extends AbstractController
 
         $objFiles=$this->getDoctrine()->getRepository(MediaFile::class)->findAll();
         $objImages=$this->getDoctrine()->getRepository(MediaImage::class)->findAll();
+        $objVideos=$this->getDoctrine()->getRepository(MediaImage::class)->findAll();
 
         $sizeFile=0;
         foreach($objFiles as $f)
@@ -38,19 +39,30 @@ class DefaultController extends AbstractController
             $sizeImage += $f->getFilesize();
         }
 
+        $sizeVideo=0;
+        foreach($objVideos as $f)
+        {
+            $sizeVideo += $f->getFilesize();
+        }
+
         $sdata[0]['name'] = 'Files';
-        $sdata[0]['y'] = $sizeFile-$sizeImage;
+        $sdata[0]['y'] = $sizeFile-$sizeImage-$sizeVideo;
         $sdata[1]['name'] = 'Images';
         $sdata[1]['y'] = $sizeImage;
+        $sdata[2]['name'] = 'Videos';
+        $sdata[2]['y'] = $sizeVideo;
 
 
         $files=count($objFiles);
         $images=count($objImages);
+        $videos=count($objVideos);
 
         $data[0]['name'] = 'Files';
-        $data[0]['y'] = $files-$images;
+        $data[0]['y'] = $files-$images-$videos;
         $data[1]['name'] = 'Images';
         $data[1]['y'] = $images;
+        $data[1]['name'] = 'Videos';
+        $data[1]['y'] = $videos;
 
         return $this->render('@Media/index.html.twig', [
             'data' => $data,
@@ -128,6 +140,22 @@ class DefaultController extends AbstractController
             'files' => $files,
             'filetype' => 'image',
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/videos" , name="ics_media_video")
+     * @Route("/videos/edit/{id}" , name="ics_media_video_edit")
+     */
+    public function videoManagement(Request $request,ContainerInterface $container,MediaImage $file=null)
+    {
+
+        $files=$this->getDoctrine()->getRepository(MediaVideo::class)->findAll();
+
+        return $this->render('@Media/file.html.twig', [
+            'files' => $files,
+            'filetype' => 'video',
+            'form' => null
         ]);
     }
 
