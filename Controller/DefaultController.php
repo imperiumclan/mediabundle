@@ -7,6 +7,7 @@ use ICS\MediaBundle\Entity\MediaImage;
 use ICS\MediaBundle\Entity\MediaVideo;
 use ICS\MediaBundle\Form\Type\MediaFileType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -125,5 +126,15 @@ class DefaultController extends AbstractController
             'filetype' => 'image',
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/images" , name="ics_media_video")
+     * @Route("/images/edit/{id}" , name="ics_media_video_edit")
+     */
+    public function videoManagement(Request $request, ContainerInterface $container, MediaImage $file = null)
+    {
+
+        return new Response('TODO : Code Video Management');
     }
 }
