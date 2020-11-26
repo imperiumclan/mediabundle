@@ -2,10 +2,10 @@
 
 namespace ICS\MediaBundle\Service;
 
+use Exception;
 use ICS\MediaBundle\Entity\MediaFile;
 use ICS\MediaBundle\Entity\MediaImage;
 use ICS\MediaBundle\Entity\MediaVideo;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpClient\CachingHttpClient;
 use Symfony\Component\HttpClient\CurlHttpClient;
@@ -19,11 +19,10 @@ class MediaClient
 
     public function __construct(ContainerInterface $container)
     {
-        $store = new Store($container->getParameter('kernel.project_dir').'/var/cache/WebServices/Downloader/');
-        $this->client=new CurlHttpClient();
+        $store = new Store($container->getParameter('kernel.project_dir').'/var/cache/MediaBundle/Downloader/');
+        $this->client = new CurlHttpClient();
         $this->client = new CachingHttpClient($this->client, $store);
         $this->container = $container;
-
     }
 
     public function getBasePath()
@@ -31,91 +30,73 @@ class MediaClient
         $mediasDirectory = $this->container->getParameter('medias')['path'];
         $this->basePath = $this->container->get('kernel')->getProjectDir().'/public/'.$mediasDirectory;
 
-        if(!file_exists($this->basePath))
-        {
-            mkdir($this->basePath,0777,true);
+        if (!file_exists($this->basePath)) {
+            mkdir($this->basePath, 0777, true);
         }
 
         return $this->basePath;
     }
 
-    public function DownloadFile(string $url,string $fileFullname=null)
+    private function Download(string $url = null, string $fileFullname = null)
+    {
+        if (null == $url) {
+            if (null == $fileFullname) {
+                $fileFullname = 'downloaded/'.basename($url);
+            }
+
+            try {
+                $response = $this->client->request('GET', $url);
+
+                if (200 !== $response->getStatusCode()) {
+                    return null;
+                }
+
+                $fileHandler = fopen($fileFullname, 'w');
+                foreach ($this->client->stream($response) as $chunk) {
+                    fwrite($fileHandler, $chunk->getContent());
+                }
+            } catch (Exception $ex) {
+                return null;
+            }
+        }
+
+        return $fileFullname;
+    }
+
+    public function DownloadFile(string $url = null, string $fileFullname = null)
     {
         $result = null;
-
-        if($fileFullname==null)
-        {
-            $fileFullname="downloaded/".basename($url);
+        $filePath = $this->Download($url, $fileFullname);
+        if (null != $filePath) {
+            $result = new MediaFile($this->container);
+            $result->Load($filePath);
         }
-
-        $response = $this->client->request('GET', $url);
-
-        if (200 !== $response->getStatusCode()) {
-            throw new \Exception('Download Error: '. $this->mediaURL);
-        }
-
-        $fileHandler = fopen($fileFullname, 'w');
-        foreach ($this->client->stream($response) as $chunk) {
-            fwrite($fileHandler, $chunk->getContent());
-        }
-
-        $result = new MediaFile($this->container);
-        $result->Load($fileFullname);
 
         return $result;
     }
 
-    public function DownloadImage(string $url,string $fileFullname=null)
+    public function DownloadImage(string $url = null, string $fileFullname = null)
     {
         $result = null;
 
-        if($fileFullname==null)
-        {
-            $fileFullname="downloaded/".basename($url);
+        $filePath = $this->Download($url, $fileFullname);
+        if (null != $filePath) {
+            $result = new MediaImage($this->container);
+            $result->Load($filePath);
         }
-
-        $response = $this->client->request('GET', $url);
-
-        if (200 !== $response->getStatusCode()) {
-            throw new \Exception('Download Error: '. $this->mediaURL);
-        }
-
-        $fileHandler = fopen($fileFullname, 'w');
-        foreach ($this->client->stream($response) as $chunk) {
-            fwrite($fileHandler, $chunk->getContent());
-        }
-
-        $result = new MediaImage($this->container);
-        $result->Load($fileFullname);
 
         return $result;
     }
 
-    public function DownloadVideo(string $url,string $fileFullname=null)
+    public function DownloadVideo(string $url = null, string $fileFullname = null)
     {
         $result = null;
-
-        if($fileFullname==null)
-        {
-            $fileFullname="downloaded/".basename($url);
+        $filePath = $this->Download($url, $fileFullname);
+        if (null != $filePath) {
+            $result = new MediaVideo($this->container);
+            $result->Load($filePath, null, '', false);
         }
-
-        $response = $this->client->request('GET', $url);
-
-        if (200 !== $response->getStatusCode()) {
-            throw new \Exception('Download Error: '. $this->mediaURL);
-        }
-
-        $fileHandler = fopen($fileFullname, 'w');
-        foreach ($this->client->stream($response) as $chunk) {
-            fwrite($fileHandler, $chunk->getContent());
-        }
-
-        $result = new MediaVideo($this->container);
-        $result->Load($fileFullname,null,"",false);
 
         return $result;
     }
-
-
 }
