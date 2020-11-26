@@ -2,7 +2,7 @@
     "name": "imperiumclan/media-bundle",
     "description": "File Management for symfony",
     "type": "symfony-bundle",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "license": "MIT",
     "autoload": {
         "psr-4": {
