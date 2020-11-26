@@ -2,6 +2,7 @@
 
 {% block body %}
     <div class="container-fluid">
+        {% if form != null %}
         <div class="row">
             <div class="col-12">
                 <h1><i class="fa fa-{{ filetype }}"></i> Welcome to Media Bundle</h1>
@@ -10,6 +11,7 @@
                 {{ form_end(form)}}
             </div>
         </div>
+        {% endif %}
         <div class="row">
             <div class="col-12">
                 {% for file in files %}
@@ -17,6 +19,10 @@
                         <div class="media">
                             {% if file|mediaType == 'image' %}
                                 <img class="align-self-start mr-3" src="{{ file.assetPath| imagine_filter('mediaBundleMini') }}"/>
+                            {% else if file|mediaType == 'video' %}
+                                <video controls>
+                                    <source src="{{ asset(file.assetPath) }}"/>
+                                </video>
                             {% else %}
                                 <span class="fa fa-file-alt text-primary display-4 mr-3 align-self-start"></span>
                             {% endif %}

@@ -28,20 +28,6 @@ navigation:
             media_video:
               lib: Video
               icon: fa fa-video
-              route: ics_media_file
-            divider2:
-              lib: divider
-            media_photo:
-              lib: Photo
-              icon: fa fa-picture
-              route: ics_media_file
-            media_music:
-              lib: Music
-              icon: fa fa-music
-              route: ics_media_file
-            media_movie:
-              lib: Movie
-              icon: fa fa-film
-              route: ics_media_file
+              route: ics_media_video
           roles:
               - ROLE_ADMIN
